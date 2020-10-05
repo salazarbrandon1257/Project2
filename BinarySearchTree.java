@@ -124,6 +124,9 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     public boolean compareStructure(BinarySearchTree<AnyType> s ){
         return compareStructure(root, s.root);
     }
+    public boolean equals(BinarySearchTree<AnyType> s){
+        return equals(root, s.root);
+    }
 
     /**
      * Internal method to insert into a subtree.
@@ -300,6 +303,22 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
         return false;
     }
 
+    private boolean equals(BinaryNode<AnyType> t, BinaryNode<AnyType> s){
+        // if empty node
+        if(t == null && s == null) 
+            return true; 
+        // if leaf node    
+        if(t.left == null && t.right == null && s.left == null && s.right == null && t.element.equals(s.element)){
+            return true;
+        }
+        // if t or s either have children such that both exist on either side   
+        if(((t.left != null && s.left != null) || (t.right != null && s.right != null)) && t.element.equals(s.element)){
+            return equals(t.left, s.left) && equals(t.right, s.right);
+        }
+        return false;
+    }
+
+
 
 
     
@@ -338,15 +357,20 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
         //for( int i = 1; i < NUMS + 1; i++)
         //    t.insert( i );
         t.insert(7);
-        t.insert(4);
-        t.insert(3);
-        t.printTree();
+        t.insert(1);
+        t.insert(9);
+        t.insert(8);
+        t.insert(11);
+        // t.printTree();
 
-        s.insert(3);
+        s.insert(7);
+        s.insert(9);
         s.insert(1);
-        s.insert(2);
-        s.printTree();
-        // System.out.println(t.compareStructure(s));
+        s.insert(8);
+        s.insert(11);
+        // s.printTree();
+        System.out.println(t.equals(s));
+        System.out.println(t.compareStructure(s));
         // t.nodeCount();
         // System.out.println(t.isFull());
 
