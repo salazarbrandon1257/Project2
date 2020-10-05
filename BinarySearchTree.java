@@ -121,12 +121,19 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
         return isFull(root);
     }
 
-    public boolean compareStructure(BinarySearchTree<AnyType> s ){
+    public boolean compareStructure(BinarySearchTree<AnyType> s){
         return compareStructure(root, s.root);
     }
     public boolean equals(BinarySearchTree<AnyType> s){
         return equals(root, s.root);
     }
+
+    public BinarySearchTree<AnyType> copy(){
+        BinarySearchTree<AnyType> s = new BinarySearchTree<AnyType>(); 
+        s.root = copy(root);
+        return s;
+    }
+
 
     /**
      * Internal method to insert into a subtree.
@@ -317,6 +324,15 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
         }
         return false;
     }
+    private BinaryNode<AnyType> copy(BinaryNode<AnyType> t){
+        if(t == null){
+            return null;
+        }
+            BinaryNode<AnyType> node = new BinaryNode<AnyType>(t.element, copy(t.left), copy(t. right));
+            return node;
+        
+    }
+
 
 
 
@@ -369,8 +385,9 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
         s.insert(8);
         s.insert(11);
         // s.printTree();
-        System.out.println(t.equals(s));
-        System.out.println(t.compareStructure(s));
+        System.out.println(t.equals(t.copy()));
+        System.out.println(t == t.copy());
+        t.copy().printTree();
         // t.nodeCount();
         // System.out.println(t.isFull());
 
