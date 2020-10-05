@@ -120,7 +120,6 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     {
         return isFull(root);
     }
-
     /**
      * Internal method to insert into a subtree.
      * @param x the item to insert.
@@ -264,16 +263,25 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
      * @param t the node that roots the subtree.
      */
     private boolean isFull(BinaryNode<AnyType> t){
-        if( t != null )
-        {
-            if((t.left == null && t.right != null) || (t.left != null && t.right == null) ){
-                return false;
-            }
-            nodeCount(t.left);
-            nodeCount(t.right);
-        }
-        return true;
+        { 
+            // if empty tree 
+            if(t == null) 
+            return true; 
+               
+            // if leaf node 
+            if(t.left == null && t.right == null ) 
+                return true; 
+               
+            // if both left and right subtrees are not null 
+            // the are full 
+            if((t.left!=null) && (t.right!=null)) 
+                return (isFull(t.left) && isFull(t.right)); 
+               
+            // if none work 
+            return false; 
+        } 
     }
+
 
 
     
@@ -312,7 +320,6 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
         //    t.insert( i );
         t.insert(7);
         t.insert(4);
-        t.insert(9);
         t.printTree();
 
         System.out.println(t.isFull());
