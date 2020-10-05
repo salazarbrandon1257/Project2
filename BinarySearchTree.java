@@ -120,6 +120,11 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     {
         return isFull(root);
     }
+
+    public boolean compareStructure(BinarySearchTree<AnyType> s ){
+        return compareStructure(root, s.root);
+    }
+
     /**
      * Internal method to insert into a subtree.
      * @param x the item to insert.
@@ -274,12 +279,25 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
                
             // if both left and right subtrees are not null 
             // the are full 
-            if((t.left!=null) && (t.right!=null)) 
+            if((t.left != null) && (t.right != null)) 
                 return (isFull(t.left) && isFull(t.right)); 
                
             // if none work 
             return false; 
         } 
+    }
+    private boolean compareStructure(BinaryNode<AnyType> t, BinaryNode<AnyType> s){
+        // if empty node
+        if(t == null && s == null) 
+            return true; 
+        // if leaf node    
+        if(t.left == null && t.right == null && s.left == null && s.right == null ) 
+            return true;
+        // if t or s either have children such that both exist on either side   
+        if((t.left != null && s.left != null) || (t.right != null && s.right != null)){
+            return compareStructure(t.left, s.left) && compareStructure(t.right, s.right);
+        }
+        return false;
     }
 
 
@@ -315,14 +333,22 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     public static void main( String [ ] args )
     {
         BinarySearchTree<Integer> t = new BinarySearchTree<>( );
+        BinarySearchTree<Integer> s = new BinarySearchTree<>( );
         //int NUMS = 20;
         //for( int i = 1; i < NUMS + 1; i++)
         //    t.insert( i );
         t.insert(7);
         t.insert(4);
+        t.insert(3);
         t.printTree();
 
-        System.out.println(t.isFull());
+        s.insert(3);
+        s.insert(1);
+        s.insert(2);
+        s.printTree();
+        // System.out.println(t.compareStructure(s));
+        // t.nodeCount();
+        // System.out.println(t.isFull());
 
 
     }
