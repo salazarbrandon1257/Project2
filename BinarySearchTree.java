@@ -100,10 +100,6 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
             printTree(root);
     }
 
-    
-        /**
-     * Internal method that recursively traverses the tree and returns the count of nodes
-     */
     public int nodeCount( ){
         if(isEmpty( ))
             return 0;
@@ -112,10 +108,7 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
 
     }
     int count = 0;
-    
-    /**
-    * Returns true if the tree is full
-     */
+
     public boolean isFull( )
     {
         return isFull(root);
@@ -133,7 +126,35 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
         s.root = copy(root);
         return s;
     }
+    
+    public BinarySearchTree<AnyType> mirror(){
+        BinarySearchTree<AnyType> s = new BinarySearchTree<AnyType>(); 
+        s.root = mirror(root);
+        return s;
+    }
 
+    public boolean isMirror(BinarySearchTree<AnyType> s){
+        return isMirror(root, s.root);
+    }
+    public BinarySearchTree<AnyType> rotateRight(){
+        BinarySearchTree<AnyType> s = new BinarySearchTree<AnyType>();
+        s.root = rotateRight(root);
+        return s;
+    }
+    public BinarySearchTree<AnyType> rotateLeft(){
+        BinarySearchTree<AnyType> s = new BinarySearchTree<AnyType>();
+        s.root = rotateLeft(root);
+        return s;
+    }
+
+    public void printLevels() { 
+        int h = height(root); 
+        int i; 
+        for (i = 1; i <= h + 1; i++) { 
+            printLevels(root, i); 
+            System.out.println(); 
+        } 
+    } 
 
     /**
      * Internal method to insert into a subtree.
@@ -332,8 +353,66 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
             return node;
         
     }
+    private BinaryNode<AnyType> mirror(BinaryNode<AnyType> t){
+        if(t == null){
+            return null;
+        }
+            BinaryNode<AnyType> node = new BinaryNode<AnyType>(t.element, mirror(t.right), mirror(t. left));
+            return node;
+        
+    }
+    private boolean isMirror(BinaryNode<AnyType> t, BinaryNode<AnyType> s){
+        if(s == null && t == null){
+            return true;
+        }
+        if(t.left == null && t.right == null && s.left == null && s.right == null && t.element.equals(s.element)){
+            return true;
+        }
+        if(t.element.equals(s.element)){
+            return isMirror(t.left, s.right) && isMirror(t.right, s.left);
+        }
+        return false;
+    }
+
+  
+
+    /**
+     * Rotates right around the given node.
+     */
+    private BinaryNode<AnyType> rotateRight(BinaryNode<AnyType> t){
+        BinaryNode<AnyType> s = t.left; 
+        BinaryNode<AnyType> temp = s.right;   
+        // Perform rotation 
+        s.right = t; 
+        t.left = temp; 
+        // Return new root
+        return s;  
+    } 
 
 
+    private BinaryNode<AnyType> rotateLeft(BinaryNode<AnyType> t){
+        BinaryNode<AnyType> s = t.right; 
+        BinaryNode<AnyType> T2 = s.left; 
+        // Perform rotation 
+        s.left = t; 
+        t.right = T2; 
+  
+        // Return new root 
+        return s; 
+    } 
+/* Print nodes at a given level */
+private void printLevels(BinaryNode<AnyType> root, int level) 
+{ 
+    if (root == null) 
+        return; 
+    if (level == 1) 
+        System.out.println(root.element); 
+    else if (level > 1) 
+    { 
+        printLevels(root.left, level - 1); 
+        printLevels(root.right, level - 1); 
+    } 
+}
 
 
 
@@ -358,7 +437,7 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
         BinaryNode<AnyType> left;   // Left child
         BinaryNode<AnyType> right;  // Right child
     }
-
+    
 
       /** The tree root. */
     private BinaryNode<AnyType> root;
@@ -369,27 +448,41 @@ public class BinarySearchTree<AnyType extends Comparable<? super AnyType>>
     {
         BinarySearchTree<Integer> t = new BinarySearchTree<>( );
         BinarySearchTree<Integer> s = new BinarySearchTree<>( );
-        //int NUMS = 20;
-        //for( int i = 1; i < NUMS + 1; i++)
-        //    t.insert( i );
         t.insert(7);
-        t.insert(1);
-        t.insert(9);
-        t.insert(8);
-        t.insert(11);
-        // t.printTree();
+        t.insert(5);
+        t.insert(3);
 
+        s.insert(5);
+        s.insert(3);
         s.insert(7);
-        s.insert(9);
-        s.insert(1);
-        s.insert(8);
-        s.insert(11);
-        // s.printTree();
-        System.out.println(t.equals(t.copy()));
-        System.out.println(t == t.copy());
-        t.copy().printTree();
-        // t.nodeCount();
-        // System.out.println(t.isFull());
+
+        System.out.print("nodecount: ");
+        System.out.print(t.nodeCount());
+        System.out.println();
+        System.out.print("isFull: ");
+        System.out.print(t.isFull());
+        System.out.println();
+        System.out.print("compareStructure: ");
+        System.out.print(t.compareStructure(s));
+        System.out.println();
+        System.out.print("equals: ");
+        System.out.print(t.equals(s));
+        System.out.println();
+        System.out.print("copy: ");
+        System.out.print(t.equals(t.copy()));
+        System.out.print(" (t has same values as its copy), ");
+        System.out.print(t == t.copy());
+        System.out.println(" (but is a copy as they are not equal by reference)");
+        System.out.print("checking if mirror isMirror: ");
+        System.out.println(t.isMirror(t.mirror()));
+        System.out.println("performs a level-by-level printing of tree: ");
+        t.printLevels();
+        System.out.println("Now showing the right rotation:");
+        t.rotateRight().printLevels();
+        System.out.println("performs a level-by-level printing of tree: ");
+        s.printLevels();
+        System.out.println("Now showing the left rotation:");
+        s.rotateLeft().printLevels();
 
 
     }
